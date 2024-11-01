@@ -1,14 +1,13 @@
 <?php
 session_start();
 
-
 // 初期のコイン設定
 if (!isset($_SESSION['coins'])) {
     $_SESSION['coins'] = 100; // 初期コイン
 }
 
 // 賭け金と選択を処理
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bet']) && isset($_POST['choice'])) {
     $bet = (int)$_POST['bet'];
     $playerChoice = (int)$_POST['choice'];
     $computerChoice = rand(0, 2);
@@ -44,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="container">
         <h1>じゃんけんギャンブルゲーム</h1>
-        <p>現在のコイン: <?php echo $_SESSION['coins']; ?></p>
+        <p>現在のコイン: <?php echo isset($_SESSION['coins']) ? $_SESSION['coins'] : 0; ?> コイン</p>
 
         <?php if (isset($result)) : ?>
             <div class="result">
@@ -54,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         <?php endif; ?>
 
-        <form action="" method="post">
+        <form action="index.php" method="post">
             <label>賭け金を入力してください（最大 <?php echo $_SESSION['coins']; ?> コイン）:</label>
             <input type="number" name="bet" min="1" max="<?php echo $_SESSION['coins']; ?>" required>
 
